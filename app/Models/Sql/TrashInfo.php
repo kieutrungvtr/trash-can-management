@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class TrashInfo extends Model
 {
     #---- Begin trait -----#
-    
+
     #---- Ended trait -----#
 
     /**
@@ -77,7 +77,22 @@ class TrashInfo extends Model
      */
     const COL_TRASH_INFO_UPDATED_AT = 'trash_info_updated_at';
 
-    
+    /**
+     * @var string
+     */
+    const COL_TRASH_TYPE_INDEX = 'trash_type_index';
+
+    /**
+     * @var string
+     */
+    const COL_TRASH_LOCATION_INDEX = 'trash_location_index';
+
+    /**
+     * @var string
+     */
+    const COL_TRASH_GROUP_INDEX = 'trash_group_index';
+
+
 
     /**
      * @const string
@@ -85,6 +100,18 @@ class TrashInfo extends Model
     const TABLE_NAME = 'trash_info';
 
     #---- Begin custom code -----#
-    
+    public static function reportByType($group_id)
+    {
+        $data = self::query()
+            ->select([
+                'trash_type_index',
+                self::raw('sum(trash_info_weight) as total')
+            ])
+            ->where('trash_group_index', $group_id)
+            ->groupBy('trash_type_index')
+            ->get()->toArray();
+
+        return array_column($data, 'total', 'trash_type_index');
+    }
     #---- Ended custom code -----#
 }

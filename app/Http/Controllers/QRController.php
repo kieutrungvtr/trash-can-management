@@ -44,6 +44,9 @@ class QRController extends Controller
         $trash_info = new TrashInfo();
         $trash_info->user_index = $user->user_id;
         $trash_info->trash_index = $trash->trash_id;
+        $trash_info->trash_type_index = $trash->trash_type_index;
+        $trash_info->trash_group_index = $trash->trash_group_index;
+        $trash_info->trash_location_index = $trash->trash_location_index;
         $trash_info->trash_info_weight = $trash_info_weight;
         $trash_info->save();
         return Redirect::back()->with('success', 1)->withCookie(cookie('user_name', $user_name, 0, null, null, null, false));

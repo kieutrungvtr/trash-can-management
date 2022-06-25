@@ -106,6 +106,7 @@
                                     </div>
                                     @if(session("success"))
                                         <span class="text-success"><strong>Thành công!</strong></span>
+                                        <br/><br/>
                                     @endif
 
                                     <div class="form-group" id="unlock_name" style="display: none">

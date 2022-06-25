@@ -9,13 +9,12 @@ namespace App\Models\Sql;
 use Illuminate\Database\Eloquent\Model;
 #---- Begin package usage -----#
 use Illuminate\Support\Facades\Cache;
-
 #---- Ended package usage -----#
 
 class TrashType extends Model
 {
     #---- Begin trait -----#
-
+    
     #---- Ended trait -----#
 
     /**
@@ -73,7 +72,7 @@ class TrashType extends Model
      */
     const COL_TRASH_TYPE_UPDATED_AT = 'trash_type_updated_at';
 
-
+    
 
     /**
      * @const string
@@ -81,7 +80,6 @@ class TrashType extends Model
     const TABLE_NAME = 'trash_type';
 
     #---- Begin custom code -----#
-
     public static function getCacheList()
     {
         $data = Cache::get(self::TABLE_NAME, null);

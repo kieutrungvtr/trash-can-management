@@ -7,16 +7,14 @@
 namespace App\Models\Sql;
 
 use Illuminate\Database\Eloquent\Model;
-
 #---- Begin package usage -----#
 use Illuminate\Support\Facades\Cache;
-
 #---- Ended package usage -----#
 
 class TrashLocation extends Model
 {
     #---- Begin trait -----#
-
+    
     #---- Ended trait -----#
 
     /**
@@ -74,7 +72,7 @@ class TrashLocation extends Model
      */
     const COL_TRASH_LOCATION_UPDATED_AT = 'trash_location_updated_at';
 
-
+    
 
     /**
      * @const string
@@ -82,7 +80,6 @@ class TrashLocation extends Model
     const TABLE_NAME = 'trash_location';
 
     #---- Begin custom code -----#
-
     public static function getCacheList()
     {
         $data = Cache::get(self::TABLE_NAME, null);

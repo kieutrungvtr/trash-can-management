@@ -117,5 +117,6 @@
 <script src="/statics/js/dashboard.js"></script>
 <script src="/statics/js/Chart.roundedBarCharts.js"></script>
 <!-- End custom js for this page-->
+@yield('custom-script')
 </body>
 </html>
