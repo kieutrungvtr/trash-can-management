@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
 class TrashGroup extends Model
 {
     #---- Begin trait -----#
-    
+
     #---- Ended trait -----#
 
     /**
@@ -77,7 +77,7 @@ class TrashGroup extends Model
      */
     const COL_TRASH_GROUP_UPDATED_AT = 'trash_group_updated_at';
 
-    
+
 
     /**
      * @const string
@@ -97,6 +97,21 @@ class TrashGroup extends Model
                 $data[$trash_location_id][$group_id] = $trash_group;
             }
             Cache::put(self::TABLE_NAME, $data);
+        }
+        return $data;
+    }
+    public static function getCacheList2()
+    {
+        $key = self::TABLE_NAME."_V2";
+        $data = Cache::get($key, null);
+        if (!$data) {
+            $data = array();
+            $trash_group_list = self::query()->get()->toArray();
+            foreach ($trash_group_list as $trash_group) {
+                $group_id = $trash_group[self::COL_TRASH_GROUP_ID];
+                $data[$group_id] = $trash_group;
+            }
+            Cache::put($key, $data);
         }
         return $data;
     }

@@ -100,18 +100,48 @@ class TrashInfo extends Model
     const TABLE_NAME = 'trash_info';
 
     #---- Begin custom code -----#
-    public static function reportByType($group_id)
+    public static function reportByType($group_id, $from = null, $to = null)
     {
-        $data = self::query()
+        $query = self::query()
             ->select([
                 'trash_type_index',
                 self::raw('sum(trash_info_weight) as total')
             ])
             ->where('trash_group_index', $group_id)
-            ->groupBy('trash_type_index')
-            ->get()->toArray();
+            ->groupBy('trash_type_index');
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $data = $query->get()->toArray();
 
         return array_column($data, 'total', 'trash_type_index');
+    }
+
+    public static function reportByWeek($from = null, $to = null)
+    {
+
+        $query = self::query()
+            ->select([
+                self::raw('YEARWEEK(trash_info_created_at) as year_week'),
+                'trash_group_index',
+                self::raw('sum(trash_info_weight) as total')
+            ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $query
+            ->groupBy('year_week')
+            ->groupBy('trash_group_index')
+            ->orderBy('year_week', 'asc')
+            ->orderBy('trash_group_index', 'asc');
+
+        return $query->get()->toArray();
     }
     #---- Ended custom code -----#
 }
