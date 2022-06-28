@@ -7,7 +7,7 @@
         </div>
         <div>
             <a class="navbar-brand brand-logo" href="/">
-                Rác Thải
+                Trang chủ
             </a>
             <a class="navbar-brand brand-logo-mini" href="/">
 

@@ -21,6 +21,7 @@ Route::get('/error',  [App\Http\Controllers\QRController::class, 'error']);
 
 Route::middleware(RedirectIfAuthenticated::class)->get('/admin/login',  [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('login');
 Route::post('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'login'])->name('login');
+Route::get('/admin/logout', [App\Http\Controllers\Admin\LoginController::class, 'logout'])->name('logout');
 
 Route::get('/qr-code', function (\Illuminate\Http\Request $request) {
     if (!$request->get('code', '')) return null;
@@ -49,4 +50,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 //tech/re8r8U2hrTPcgKdU
-//admin/RPh5jEL4uWU2n7r6
+    //admin/RPh5jEL4uWU2n7r6

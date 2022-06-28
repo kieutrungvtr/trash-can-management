@@ -111,7 +111,7 @@ class User extends Authenticatable
      */
     const COL_USER_UPDATED_AT = 'user_updated_at';
 
-    
+
 
     /**
      * @const string
@@ -121,17 +121,17 @@ class User extends Authenticatable
     #---- Begin custom code -----#
     public function getRememberToken()
     {
-        return $this->{self::COL_USER_PASSWORD};
+        return $this->{self::COL_USER_REMEMBER_TOKEN};
     }
 
     public function setRememberToken($value)
     {
-        $this->{self::COL_USER_PASSWORD} = $value;
+        $this->{self::COL_USER_REMEMBER_TOKEN} = $value;
     }
 
     public function getRememberTokenName()
     {
-        return self::COL_USER_PASSWORD;
+        return self::COL_USER_REMEMBER_TOKEN;
     }
 
     /**

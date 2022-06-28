@@ -27,7 +27,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="trash_location_index">Địa chỉ</label>
+                            <label for="trash_location_index">Vị trí</label>
                             <select class="form-control" id="trash_location_index" name="trash_location_index" onchange="var self = this;loadGroup(self)">
                                 @foreach($trashLocation as $trashLocationData)
                                     <option value="{{$trashLocationData["trash_location_id"]}}">
@@ -45,6 +45,11 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trash_address">Địa chỉ</label>
+                            <input type="text" class="form-control" id="trash_address" name="trash_address" placeholder="Địa chỉ" required>
                         </div>
                         <button type="submit" class="btn btn-primary me-2">TẠO QR</button>
                     </form>

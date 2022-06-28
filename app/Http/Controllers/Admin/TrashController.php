@@ -37,6 +37,7 @@ class TrashController extends Controller
         $trash_type_index = $request->post('trash_type_index');
         $trash_location_index = $request->post('trash_location_index');
         $trash_group_index = $request->post('trash_group_index');
+        $trash_address = $request->post('trash_address');
 
         $trash = new Trash();
         $trash->trash_name = $trash_name;
@@ -44,6 +45,7 @@ class TrashController extends Controller
         $trash->trash_type_index = $trash_type_index;
         $trash->trash_location_index = $trash_location_index;
         $trash->trash_group_index = $trash_group_index;
+        $trash->trash_address = $trash_address;
         $trash->save();
 
         return Redirect::back()->with('QR', $trash->trash_qr);
@@ -85,17 +87,19 @@ class TrashController extends Controller
     {
         $trash = Trash::find($request->get("id", 0));
         $trash_location = $trash_type = $trash_group = array();
+        $qrCode = "";
         if ($trash) {
             $trash_location = TrashLocation::getCacheList()[$trash['trash_location_index']] ?? array();
             $trash_type = TrashType::getCacheList()[$trash['trash_type_index']] ?? array();
             $trash_group = TrashGroup::getCacheList2()[$trash['trash_group_index']] ?? array();
+            $qrCode = url("/qr_scan?code=".$trash['trash_qr']);
         }
-
         return view("admin.trash.detail", array(
             'trash' => $trash,
             'trash_location' => $trash_location,
             'trash_type' => $trash_type,
             'trash_group' => $trash_group,
+            'qrCode' => $qrCode
         ));
     }
 }

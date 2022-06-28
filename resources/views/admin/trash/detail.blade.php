@@ -32,17 +32,21 @@
                             <td><strong>Loại rác</strong></td>
                             <td>{{$trash_type["trash_type_name"]}}</td>
                         </tr>
+                        <tr>
+                            <td><strong>Địa chỉ</strong></td>
+                            <td>{{$trash["trash_address"]}}</td>
+                        </tr>
                     </table>
                     </div>
                 </div>
             </div>
         </div>
-        @if($trash['trash_qr'] ?? '')
+        @if($qrCode)
         <div class="col-md-6 grid-margin">
             <div class="card">
                 <div class="card-body text-center">
                     <h4 class="card-title">Tạo QR Code</h4>
-                    <img id="QR" src="https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl={{$trash['trash_qr']}}" width="50%" height="auto" alt="Q"/>
+                    <img id="QR" src="https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl={{$qrCode}}" width="50%" height="auto" alt="Q"/>
                     <br/>
                     <button type="button" class="btn btn-primary me-2" onclick="printQR()">IN</button>
                 </div>
