@@ -40,5 +40,20 @@
                 <i class="menu-arrow"></i>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/stats/dashboard">
+                <i class="menu-icon mdi mdi-view-dashboard"></i>
+                <span class="menu-title">{{__('Trang tổng quan')}}</span>
+                <i class="menu-arrow"></i>
+            </a>
+        </li>
+        <li class="nav-item nav-category">Dữ liệu</li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/data/export" target="_blank">
+                <i class="menu-icon mdi mdi-file-excel"></i>
+                <span class="menu-title">{{__('Xuất Excel')}}</span>
+                <i class="menu-arrow"></i>
+            </a>
+        </li>
     </ul>
 </nav>

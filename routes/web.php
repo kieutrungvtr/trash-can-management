@@ -47,6 +47,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/admin/stats/trash_group',      [App\Http\Controllers\Admin\StatisticsController::class, 'trashGroup']);
     Route::get('/admin/stats/trash_group_type', [App\Http\Controllers\Admin\StatisticsController::class, 'trashGroupType']);
     Route::get('/admin/stats/line_week',        [App\Http\Controllers\Admin\StatisticsController::class, 'trashLineWeek']);
+    Route::get('/admin/stats/dashboard',        [App\Http\Controllers\Admin\StatisticsController::class, 'dashboard']);
+    Route::get('/admin/stats/export',           [App\Http\Controllers\Admin\StatisticsController::class, 'export']);
+
+    // Data
+    Route::get('/admin/data/export',    [App\Http\Controllers\Admin\DataController::class, 'export']);
 });
 
 //tech/re8r8U2hrTPcgKdU

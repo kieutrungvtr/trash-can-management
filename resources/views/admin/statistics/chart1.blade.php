@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('page_title')
-    Tạo QR Code
+    {{__('Chart 1')}}
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-lg-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Bieu do 1</h4>
+                    <h4 class="card-title">{{__('Chart 1')}}</h4>
                     <div class="dropdown mb-4">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuSizeButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Chọn cụm

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('page_title')
-    Tạo QR Code
+    {{__('Chart 2')}}
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-lg-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Bieu do 2</h4>
+                    <h4 class="card-title">{{__('Chart 2')}}</h4>
                     <form action="{{Request::url()}}">
                         <div class="form-group row">
                             <div class="col-md-2">
