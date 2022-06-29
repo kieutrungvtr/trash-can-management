@@ -67,6 +67,7 @@
             left: 0;
             top: 0
         }</style>
+    @yield('custom-style')
 </head>
 <body>
 <div class="container-scroller">

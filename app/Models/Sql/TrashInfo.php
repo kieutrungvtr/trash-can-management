@@ -8,7 +8,8 @@ namespace App\Models\Sql;
 
 use Illuminate\Database\Eloquent\Model;
 #---- Begin package usage -----#
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 #---- Ended package usage -----#
 
 class TrashInfo extends Model
@@ -125,7 +126,7 @@ class TrashInfo extends Model
 
         $query = self::query()
             ->select([
-                self::raw('YEARWEEK(trash_info_created_at) as year_week'),
+                self::raw('YEARWEEK(trash_info_created_at, 3) as year_week'),
                 'trash_group_index',
                 self::raw('sum(trash_info_weight) as total')
             ]);
@@ -141,6 +142,204 @@ class TrashInfo extends Model
             ->orderBy('year_week', 'asc')
             ->orderBy('trash_group_index', 'asc');
 
+        return $query->get()->toArray();
+    }
+
+    public static function reportTypeWeek($from = null, $to = null)
+    {
+        $query = self::query()->select([
+            self::raw("min(trash_info_created_at) as min_date"),
+            self::raw("max(trash_info_created_at) as max_date"),
+        ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $min_max_data = $query->get()->first();
+        $min_date = $min_max_data['min_date'] ?? '';
+        $max_date = $min_max_data['max_date'] ?? '';
+        if(!$min_date) return array();
+        $min_week = date("oW", strtotime($min_date));
+        $max_week = date("oW", strtotime($max_date));
+        $week_diff = TrashInfo::week_diff($min_week, $max_week);
+
+        $query = self::query()
+            ->select([
+                'trash_type_index',
+                self::raw("sum(trash_info_weight)/$week_diff as total")
+            ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $query
+            ->groupBy('trash_type_index')
+            ->orderBy('trash_type_index', 'asc');
+        $raw_data = $query->get()->toArray();
+        return array_column($raw_data, 'total', 'trash_type_index');
+    }
+
+    public static function reportTypeDate($from = null, $to = null)
+    {
+        $query = self::query()->select([
+            self::raw("min(trash_info_created_at) as min_date"),
+            self::raw("max(trash_info_created_at) as max_date"),
+        ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $min_max_data = $query->get()->first();
+        $min_date = $min_max_data['min_date'] ?? '';
+        $max_date = $min_max_data['max_date'] ?? '';
+        if(!$min_date) return array();
+        $date_diff = date_diff(date_create($min_date),date_create($max_date))->days + 1;
+
+        $query = self::query()
+            ->select([
+                'trash_type_index',
+                self::raw("sum(trash_info_weight)/$date_diff as total")
+            ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $query
+            ->groupBy('trash_type_index')
+            ->orderBy('trash_type_index', 'asc');
+        $raw_data = $query->get()->toArray();
+        return array_column($raw_data, 'total', 'trash_type_index');
+    }
+
+    public static function week_diff($year_week1, $year_week2)
+    {
+        if ($year_week2 < $year_week1) return self::week_diff($year_week2, $year_week1);
+        $year1 = substr($year_week1, 0, 4);
+        $year2 = substr($year_week2, 0, 4);
+        $week1 = substr($year_week1, 4, 2);
+        $week2 = substr($year_week2, 4, 2);
+        if ($year1 == $year2) {
+            return (int)$week2 - (int)$week1 + 1;
+        }
+        else {
+            $diff_year = $year2 - ($year1 + 1);
+            return $diff_year * 52 + $week2 + (52 - $week1) + 1;
+        }
+    }
+    public static function maxUser($group= null, $type= null, $from = null, $to = null)
+    {
+        $query = self::query()
+            ->select([
+                'user_index',
+                self::raw("sum(trash_info_weight) as total")
+            ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        if ($group) {
+            $query->where('trash_group_index',$group);
+        }
+        if ($type) {
+            $query->where('trash_type_index',$type);
+        }
+        $query
+            ->groupBy('user_index')
+            ->orderBy('total', 'desc');
+
+        $user_info = $query->get()->first();
+        $user = User::query()->find($user_info["user_index"]??0)->toArray();
+        $user['total'] = $user_info['total'];
+        return $user;
+    }
+
+    public static function maxUserType($trash_type_list, $from = null, $to = null)
+    {
+        $result = [];
+        foreach ($trash_type_list as $trash_type) {
+            $trash_type_id = $trash_type['trash_type_id'];
+            $result[$trash_type_id] = self::maxUser(null, $trash_type_id, $from, $to);
+        }
+        return $result;
+    }
+
+    public static function maxUserGroup($trash_group_list, $from = null, $to = null)
+    {
+        $result = [];
+        foreach ($trash_group_list as $trash_group) {
+            $trash_group_id = $trash_group['trash_group_id'];
+            $result[$trash_group_id] = self::maxUser($trash_group_id, null, $from, $to);
+        }
+        return $result;
+    }
+
+    public static function maxTrashType($from = null, $to = null)
+    {
+        $query = self::query()
+            ->select([
+                'trash_type_index',
+                self::raw("sum(trash_info_weight) as total")
+            ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $query
+            ->groupBy('trash_type_index')
+            ->orderBy('total', 'desc');
+
+        $trash_type_info = $query->get()->first();
+        return $trash_type_info;
+    }
+
+    public static function trashDate($from = null, $to = null)
+    {
+        $query = self::query()
+            ->select([
+                self::raw("trash_type_index"),
+                self::raw("date(trash_info_created_at) as `date`"),
+                self::raw("sum(trash_info_weight) as total")
+            ]);
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
+        $query
+            ->groupBy('trash_type_index')
+            ->groupBy('date');
+
+        $result = [];
+        $trash_data = $query->get()->toArray();
+        foreach ($trash_data as $trash) {
+            $result[$trash["date"]][$trash['trash_type_index']] = $trash['total'];
+        }
+        return $result;
+    }
+
+
+    public static function getExport($from = null, $to = null)
+    {
+        $query = self::query();
+        if ($from) {
+            $query->where('trash_info_created_at','>=', $from);
+        }
+        if ($to) {
+            $query->where('trash_info_created_at','<=', $to);
+        }
         return $query->get()->toArray();
     }
     #---- Ended custom code -----#
