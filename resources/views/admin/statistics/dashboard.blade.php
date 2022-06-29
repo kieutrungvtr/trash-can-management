@@ -83,17 +83,17 @@
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <tr>
-                                                    <th>Tên loại rác</th>
-                                                    @foreach($date_totals_list??[] as $date)
-                                                        <th>{{date("d/m/Y", strtotime($date))}}</th>
+                                                    <th>#</th>
+                                                    @foreach($trash_type_list as $trash_type)
+                                                        <th>{{$trash_type['trash_type_name']}}</th>
                                                     @endforeach
                                                 </tr>
-                                                @foreach($trash_type_list as $trash_type)
+                                                @foreach($date_totals_list??[] as $date)
                                                     <tr>
-                                                    <td>{{$trash_type['trash_type_name']}}</td>
-                                                    @foreach($date_totals_list??[] as $date)
-                                                        <td>{{number_format($date_totals[$date][$trash_type['trash_type_id']]??0, 2)}}kg</td>
-                                                    @endforeach
+                                                    <td><strong>{{$date}}</strong></td>
+                                                        @foreach($trash_type_list as $trash_type)
+                                                            <td>{{number_format($date_totals[$date][$trash_type['trash_type_id']]??0, 2)}}kg</td>
+                                                        @endforeach
                                                     </tr>
                                                 @endforeach
                                             </table>
