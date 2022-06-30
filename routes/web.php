@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/admin/stats/export',           [App\Http\Controllers\Admin\StatisticsController::class, 'export']);
 
     // Data
+    Route::get('/admin/data/list',    [App\Http\Controllers\Admin\DataController::class, 'list']);
     Route::get('/admin/data/export',    [App\Http\Controllers\Admin\DataController::class, 'export']);
 });
 

@@ -47,11 +47,11 @@
                 <i class="menu-arrow"></i>
             </a>
         </li>
-        <li class="nav-item nav-category">Dữ liệu</li>
+        <li class="nav-item nav-category">Thu thập dữ liệu</li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/data/export" target="_blank">
+            <a class="nav-link" href="/admin/data/list">
                 <i class="menu-icon mdi mdi-file-excel"></i>
-                <span class="menu-title">{{__('Xuất Excel')}}</span>
+                <span class="menu-title">{{__('Danh sách dữ liệu')}}</span>
                 <i class="menu-arrow"></i>
             </a>
         </li>

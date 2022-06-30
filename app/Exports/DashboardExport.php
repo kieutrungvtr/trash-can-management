@@ -35,8 +35,6 @@ class DashboardExport implements FromCollection, WithStrictNullComparison
         $max_trash_type_info = TrashInfo::maxTrashType();
         $avg_day_type_report = TrashInfo::reportTypeDate();
         $avg_week_type_report = TrashInfo::reportTypeWeek();
-        $max_type_user = TrashInfo::maxUserType($trash_type_list);
-        $max_group_user = TrashInfo::maxUserGroup(TrashGroup::getCacheList2());
         $max_trash_type_id = $max_trash_type_info["trash_type_index"];
         $max_trash_type_kg = $max_trash_type_info["total"];
 
@@ -88,25 +86,6 @@ class DashboardExport implements FromCollection, WithStrictNullComparison
         }
         $result[] = $row_title;
         $result[] = $row_result;
-
-        $result[] = array('');
-        $result[] = array('');
-        $result[] = array('Người đổ rác nhiều nhất theo loại rác');
-        $result[] = array('Loại rác', 'Tên người đổi rác', 'Số lượng');
-        foreach ($trash_type_list as $trash_type) {
-            $max_user = $max_type_user[$trash_type["trash_type_id"]];
-            $result[] = array($trash_type['trash_type_name'], $max_user["user_name"] ?? 'Chưa có ai', $max_user['total'] ??0);
-        }
-        $result[] = array('');
-        $result[] = array('');
-        $result[] = array('Người đổ rác nhiều nhất theo cụm');
-        $result[] = array('Vị trí', 'Cụm', 'Tên người đổi rác', 'Số lượng');
-        foreach ($trash_group_list as $trash_location_id => $trash_group_data) {
-            foreach ($trash_group_data as $trash_group) {
-                $max_user = $max_group_user[$trash_group["trash_group_id"]];
-                $result[] = array($trash_location_list[$trash_group['trash_location_index']]['trash_location_name'], $trash_group['trash_group_name'], $max_user["user_name"] ?? 'Chưa có ai', $max_user['total'] ??0);
-            }
-        }
         return new Collection($result);
     }
 }

@@ -49,11 +49,6 @@
                                 Trung bình một ngày/tuần thải ra bao nhiêu rác
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="report_user_tab" data-bs-toggle="tab" href="#report_user_type" role="tab" aria-controls="report_day">
-                                Người đổ rác nhiều nhất
-                            </a>
-                        </li>
                     </ul>
                 </div>
                 <div class="tab-content tab-content-basic">
@@ -129,86 +124,6 @@
                                             <h3 class="rate-percentage">{{number_format($avg_week_type_report[$trash_type['trash_type_id']] ?? 0, 2)}}kg</h3>
                                         </div>
                                     @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade show" id="report_user_type" role="tabpanel" aria-labelledby="report_day">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Người đổ rác nhiều nhất theo loại rác</h4>
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tr>
-                                                    <th>Loại rác</th>
-                                                    <th>Tên người đổi rác</th>
-                                                    <th>Số lượng</th>
-                                                </tr>
-                                                @foreach($trash_type_list as $trash_type)
-                                                    <tr>
-                                                        <td><i class="menu-icon mdi mdi-label" style="color: {{$trash_type['trash_type_color']}}"></i>&nbsp;
-                                                            {{$trash_type['trash_type_name']}}
-                                                        </td>
-                                                        <td>{{$max_type_user[$trash_type['trash_type_id']]["user_name"] ?? 'Chưa có ai'}}</td>
-                                                        <td>{{number_format($max_type_user[$trash_type['trash_type_id']]["total"] ?? 0, 2)}}kg</td>
-                                                    </tr>
-                                                @endforeach
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Người đổ rác nhiều nhất theo cụm</h4>
-
-                                        <div class="dropdown">
-                                            <button class="btn btn-primary text-white dropdown-toggle" type="button" id="dropdownMenuSizeButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                Chọn vị trí của cụm
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton3" data-popper-placement="top-start">
-                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                    @foreach($trash_location_list as $trash_location)
-                                                        <a class="dropdown-item" data-bs-toggle="tab" href="#report_user_location_{{$trash_location['trash_location_id']}}" role="tab" aria-controls="report_user_location">
-                                                            {{$trash_location["trash_location_name"]}}
-                                                        </a>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="tab-content tab-content-basic">
-                                            @php $first = true; @endphp
-                                            @foreach($trash_location_list as $trash_location)
-                                                @php $trash_location_id = $trash_location['trash_location_id']; @endphp
-                                                <div class="tab-pane fade show @if($first) active @endif" id="report_user_location_{{$trash_location_id}}" role="tabpanel" aria-labelledby="report_user_location_{{$trash_location_id}}">
-                                                    <div class="table-responsive">
-                                                        <table class="table">
-                                                            <tr>
-                                                                <th>Tên cụm</th>
-                                                                <th>Tên người đổi rác</th>
-                                                                <th>Số lượng</th>
-                                                            </tr>
-                                                            @foreach($trash_group_list[$trash_location_id] ?? [] as $trash_group)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{$trash_group['trash_group_name']}}
-                                                                    </td>
-                                                                    <td>{{$max_group_user[$trash_group['trash_group_id']]["user_name"] ?? 'Chưa có ai'}}</td>
-                                                                    <td>{{number_format($max_group_user[$trash_group['trash_group_id']]["total"] ?? 0, 2)}}kg</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                @php $first = false; @endphp
-                                            @endforeach
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

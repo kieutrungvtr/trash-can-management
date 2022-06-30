@@ -331,7 +331,13 @@ class TrashInfo extends Model
     }
 
 
-    public static function getExport($from = null, $to = null)
+    public static function getExport($from = null, $to = null, $location_id = null, $group_id = null, $type = null, $page = 0, $limit = 20)
+    {
+        $query = self::getExportQuery($from, $to, $location_id, $group_id, $type, $page, $limit);
+
+        return $query->get()->toArray();
+    }
+    public static function getExportQuery($from = null, $to = null, $location_id = null, $group_id = null, $type = null, $page = 0, $limit = 20)
     {
         $query = self::query();
         if ($from) {
@@ -340,7 +346,21 @@ class TrashInfo extends Model
         if ($to) {
             $query->where('trash_info_created_at','<=', $to);
         }
-        return $query->get()->toArray();
+        if ($location_id) {
+            $query->where('trash_location_index','=', $location_id);
+        }
+        if ($group_id) {
+            $query->where('trash_group_index','=', $group_id);
+        }
+        if ($type) {
+            $query->where('trash_type_index','=', $type);
+        }
+
+        if ($page) {
+            $query->limit($limit)
+                ->offset($limit*($page-1));
+        }
+        return $query;
     }
     #---- Ended custom code -----#
 }

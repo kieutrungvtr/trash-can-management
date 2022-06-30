@@ -201,8 +201,6 @@ class StatisticsController extends Controller
             'trash_group_list' => $trash_group_list,
             'avg_day_type_report' => TrashInfo::reportTypeDate(),
             'avg_week_type_report' => TrashInfo::reportTypeWeek(),
-            'max_type_user' => TrashInfo::maxUserType($trash_type_list),
-            'max_group_user' => TrashInfo::maxUserGroup(TrashGroup::getCacheList2()),
             'max_trash_type_id' => $max_trash_type_info["trash_type_index"],
             'max_trash_type_kg' => $max_trash_type_info["total"],
             'date_totals' => $date_totals,

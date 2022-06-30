@@ -27,9 +27,31 @@ class DataExport implements FromCollection
     public function collection()
     {
         $trash_type_list = TrashType::getCacheList();
-        $trash_group_list = TrashGroup::getCacheList2();
+        $trash_group_list = TrashGroup::getCacheList();
+        $trash_group_list_map = TrashGroup::getCacheList2();
         $trash_location_list = TrashLocation::getCacheList();
 
+        $max_type_user = TrashInfo::maxUserType($trash_type_list);
+        $max_group_user = TrashInfo::maxUserGroup(TrashGroup::getCacheList2());
+        $result[] = array('Người đổ rác nhiều nhất theo loại rác');
+        $result[] = array('Loại rác', 'Tên người đổi rác', 'Số lượng');
+        foreach ($trash_type_list as $trash_type) {
+            $max_user = $max_type_user[$trash_type["trash_type_id"]];
+            $result[] = array($trash_type['trash_type_name'], $max_user["user_name"] ?? 'Chưa có ai', $max_user['total'] ??0);
+        }
+        $result[] = array('');
+        $result[] = array('');
+        $result[] = array('Người đổ rác nhiều nhất theo cụm');
+        $result[] = array('Vị trí', 'Cụm', 'Tên người đổi rác', 'Số lượng');
+        foreach ($trash_group_list as $trash_location_id => $trash_group_data) {
+            foreach ($trash_group_data as $trash_group) {
+                $max_user = $max_group_user[$trash_group["trash_group_id"]];
+                $result[] = array($trash_location_list[$trash_group['trash_location_index']]['trash_location_name'], $trash_group['trash_group_name'], $max_user["user_name"] ?? 'Chưa có ai', $max_user['total'] ??0);
+            }
+        }
+
+        $result[] = array('');
+        $result[] = array('');
         $user_list = [];
         $result[] = $this->headings();
         $data = TrashInfo::getExport($this->_from, $this->_to);
@@ -43,8 +65,10 @@ class DataExport implements FromCollection
             }
             $result[] = array(
                 $user_list[$user_id]["user_name"],
+                $user_list[$user_id]["user_phone"],
+                $this->gender($user_list[$user_id]["user_gender"]),
                 $trash_location_list[$trash_location_id]["trash_location_name"],
-                $trash_group_list[$trash_group_id]["trash_group_name"],
+                $trash_group_list_map[$trash_group_id]["trash_group_name"],
                 $trash_type_list[$trash_type_id]["trash_type_name"],
                 $item["trash_info_weight"],
                 $item["trash_info_created_at"],
@@ -60,11 +84,25 @@ class DataExport implements FromCollection
     {
         return [
             "Tên người dùng",
+            "Số điện thoại",
+            "Giới tính",
             "Vị trí",
             "Cụm",
             "Loại rác thải",
             "Cân nặng (kg)",
             "Ngày tạo",
         ];
+    }
+
+
+
+    private function gender($id)
+    {
+        $data = array(
+            0 => "Không",
+            1 => "Nam",
+            2 => "Nữ",
+        );
+        return $data[$id];
     }
 }
