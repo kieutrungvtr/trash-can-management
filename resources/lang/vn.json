@@ -1,4 +1,7 @@
 {
     "Login": "Đăng nhập",
-    "login": "đăng nhập"
+    "login": "đăng nhập",
+    "Chart 1": "Theo loại rác",
+    "Chart 2": "Theo cụm",
+    "Chart 3": "Theo thời gian"
 }
