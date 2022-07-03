@@ -35,8 +35,8 @@ class DashboardExport implements FromCollection, WithStrictNullComparison
         $max_trash_type_info = TrashInfo::maxTrashType();
         $avg_day_type_report = TrashInfo::reportTypeDate();
         $avg_week_type_report = TrashInfo::reportTypeWeek();
-        $max_trash_type_id = $max_trash_type_info["trash_type_index"];
-        $max_trash_type_kg = $max_trash_type_info["total"];
+        $max_trash_type_id = $max_trash_type_info["trash_type_index"] ?? 0;
+        $max_trash_type_kg = $max_trash_type_info["total"] ?? 0;
 
         $result[] = array(
             "Loại Rác Có Khối Lượng Lớn Nhất",

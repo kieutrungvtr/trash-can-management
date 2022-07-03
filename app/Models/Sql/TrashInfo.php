@@ -270,7 +270,7 @@ class TrashInfo extends Model
             ->orderBy('total', 'desc');
 
         $user_info = $query->get()->first();
-        $user = User::query()->find($user_info["user_index"]??0)->toArray();
+        $user = User::query()->findOrNew($user_info["user_index"]??0)->toArray();
         $user['total'] = $user_info['total'];
         return $user;
     }
