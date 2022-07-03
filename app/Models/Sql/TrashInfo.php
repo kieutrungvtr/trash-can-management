@@ -271,7 +271,7 @@ class TrashInfo extends Model
 
         $user_info = $query->get()->first();
         $user = User::query()->findOrNew($user_info["user_index"]??0)->toArray();
-        $user['total'] = $user_info['total'];
+        $user['total'] = $user_info['total'] ?? 0;
         return $user;
     }
 
