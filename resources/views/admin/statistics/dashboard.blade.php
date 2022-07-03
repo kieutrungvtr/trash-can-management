@@ -62,7 +62,7 @@
                                         <form action="{{Request::url()}}">
                                             <div class="form-group row">
                                                 <div class="col-md-2">
-                                                    <label for="from">Tù ngày</label>
+                                                    <label for="from">Từ ngày</label>
                                                     <input type="date" id="from" name="from" value="{{$from}}" class="form-control"/>
                                                 </div>
                                                 <div class="col-md-2">
@@ -93,6 +93,27 @@
                                                 @endforeach
                                             </table>
                                         </div>
+
+                                        @if($max_page > 1)
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination">
+                                                    <li class="page-item"><a class="page-link" href="{{$page_uri}}&page=1"
+                                                                             aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                                                    </li>
+                                                    @for($p = max($page-5, 1); $p <= min($page+5, $max_page); $p++)
+                                                        <li class="page-item @if($p == $page) active @endif"><a
+                                                                class="page-link"
+                                                                href="{{$page_uri}}&page={{$p}}">{{$p}}</a></li>
+                                                    @endfor
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="{{$page_uri}}&page={{($max_page??0)}}"
+                                                           aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

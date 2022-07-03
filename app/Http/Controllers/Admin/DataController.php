@@ -26,7 +26,7 @@ class DataController extends Controller
     }
     public function list(Request $request)
     {
-        $from = $request->get("from", date('Y-m-01'));
+        $from = $request->get("from", date('Y-m-d', time() - 86400*29));
         $to = $request->get("to", date('Y-m-d'));
         $location_id = $request->get("location_id",'');
         $group_id = $request->get("group_id",'');
@@ -89,7 +89,7 @@ class DataController extends Controller
             'heading' => $heading,
             'listing' => $result,
             'max_page' => floor($max/$limit),
-            'page_uri' => $new_request->getUri(),
+            'page_uri' => "/admin/data/list?".http_build_query($new_request->toArray()),
             'page_parameter' => http_build_query($new_request->toArray()),
         ));
     }

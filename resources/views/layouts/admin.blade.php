@@ -83,9 +83,14 @@
                 @yield('content')
             </div>
 
-            <footer class="footer">
+            <footer class="footer pt-3 pb-3">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
-{{--                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Rác thải by Hậu và Trung</span>--}}
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/lmca.png" alt="Liên minh châu âu"/>
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/eu_jule.png" alt="EU JULE"/>
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/oxfam.png" alt="OXFAM"/>
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/ueh_university.png" alt="UEH"/>
+                    </span>
                     <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2022</span>
                 </div>
             </footer>

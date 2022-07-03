@@ -13,16 +13,22 @@
                     <form action="{{Request::url()}}">
                         <div class="form-group row">
                             <div class="col-md-2">
-                                <label for="from">Tù ngày</label>
+                                <label for="from">Từ ngày</label>
                                 <input type="date" id="from" name="from" value="{{$from}}" class="form-control"/>
                             </div>
                             <div class="col-md-2">
                                 <label for="to">Đến ngày</label>
                                 <input type="date" id="to" name="to" value="{{$to}}" class="form-control"/>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <br/>
-                                <button type="submit" class="btn btn-primary me-2">Tìm kiếm</button>
+                                <button type="submit" class="btn btn-primary me-2 w-100">Tìm kiếm</button>
+                            </div>
+                            <div class="col-md-2">
+                                <br/>
+                                <button type="submit" class="btn btn-primary me-2 w-100" name="export" value="1">
+                                    <i class="icon-download"></i>Xuất dữ liệu
+                                </button>
                             </div>
                         </div>
                     </form>

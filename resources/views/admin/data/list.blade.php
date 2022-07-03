@@ -67,15 +67,15 @@
 
                                         <div class="dropdown">
                                             <button class="btn btn-primary text-white dropdown-toggle" type="button"
-                                                    id="dropdownMenuSizeButton3" data-bs-toggle="dropdown"
+                                                    id="dropdownMenuSizeButton" data-bs-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="true">
-                                                Chọn vị trí của cụm
+                                                {{current($trash_location_list)['trash_location_name'] ?? 'Chọn vị trí của cụm'}}
                                             </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton3"
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton"
                                                  data-popper-placement="top-start">
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                                     @foreach($trash_location_list as $trash_location)
-                                                        <a class="dropdown-item" data-bs-toggle="tab"
+                                                        <a class="group-dropdown dropdown-item" data-bs-toggle="tab"
                                                            href="#report_user_location_{{$trash_location['trash_location_id']}}"
                                                            role="tab" aria-controls="report_user_location">
                                                             {{$trash_location["trash_location_name"]}}
@@ -135,7 +135,7 @@
                                         <input type="hidden" name="group" value="{{$group_id}}">
                                         <div class="form-group row">
                                             <div class="col-lg-2">
-                                                <label for="from">Tù ngày</label>
+                                                <label for="from">Từ ngày</label>
                                                 <input type="date" id="from" name="from" value="{{$from}}"
                                                        class="form-control"/>
                                             </div>
@@ -210,24 +210,26 @@
                                                 </tr>
                                             @endforeach
                                         </table>
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination">
-                                                <li class="page-item"><a class="page-link" href="{{$page_uri}}&page=1"
-                                                                         aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                @for($p = max($page-5, 1); $p <= min($page+5, $max_page); $p++)
-                                                    <li class="page-item @if($p == $page) active @endif"><a
-                                                            class="page-link"
-                                                            href="{{$page_uri}}&page={{$p}}">{{$p}}</a></li>
-                                                @endfor
-                                                <li class="page-item">
-                                                    <a class="page-link" href="{{$page_uri}}&page={{($max_page??0) -1}}"
-                                                       aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                        @if($max_page > 1)
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination">
+                                                    <li class="page-item"><a class="page-link" href="{{$page_uri}}&page=1"
+                                                                             aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                                                    </li>
+                                                    @for($p = max($page-5, 1); $p <= min($page+5, $max_page); $p++)
+                                                        <li class="page-item @if($p == $page) active @endif"><a
+                                                                class="page-link"
+                                                                href="{{$page_uri}}&page={{$p}}">{{$p}}</a></li>
+                                                    @endfor
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="{{$page_uri}}&page={{($max_page??0)}}"
+                                                           aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -241,5 +243,12 @@
 @endsection
 
 @section('custom-script')
-    <script></script>
+
+    <script>
+        $(function () {
+            $("a.group-dropdown").on("click", function() {
+                $('#dropdownMenuSizeButton').text($(this).text());
+            });
+        })
+    </script>
 @endsection

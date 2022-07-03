@@ -4,6 +4,9 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Exports\Chart1Export;
+use App\Exports\Chart2Export;
+use App\Exports\Chart3Export;
 use App\Exports\DashboardExport;
 use App\Exports\DataExport;
 use App\Http\Controllers\Controller;
@@ -18,9 +21,13 @@ class StatisticsController extends Controller
 {
     public function trashGroup(Request $request)
     {
-        $from = $request->get('from', '');
-        $to = $request->get('to', '');
-        $group_id = $request->get("group", 1);
+        $export = $request->get('export', 0);
+        if ($export) {
+            return Excel::download(new Chart1Export($request), str_replace(' ', '', __('Chart 1')).".".date('Ymd_His').'.xlsx');
+        }
+        $from = $request->get("from", date('Y-m-d', time() - 86400*29));
+        $to = $request->get("to", date('Y-m-d'));
+        $group_id = $request->get("group", 0);
         $trash_type_list = TrashType::getCacheList();
         $trash_group_list = TrashGroup::getCacheList();
         $trash_location_list = TrashLocation::getCacheList();
@@ -33,6 +40,7 @@ class StatisticsController extends Controller
             $data[] = $report[$trash_type["trash_type_id"]] ?? 0;
             $color[] = $trash_type["trash_type_color"];
         }
+        $group_name = TrashGroup::query()->find($group_id)["trash_group_name"] ?? '';
 
         $datasets[] = array(
             "label" => "kg",
@@ -48,15 +56,25 @@ class StatisticsController extends Controller
         );
 
         return view('admin.statistics.chart1', [
-            'from' => $from, 'to' => $to, 'group_id' => $group_id,
-            'chart_data' => $chart_data, 'trash_group_list' => $trash_group_list, 'trash_location_list' => $trash_location_list]);
+            'from' => $from,
+            'to' => $to,
+            'group_id' => $group_id,
+            'group_name' => $group_name,
+            'chart_data' => $chart_data,
+            'trash_group_list' => $trash_group_list,
+            'trash_location_list' => $trash_location_list
+        ]);
     }
 
 
     public function trashGroupType(Request $request)
     {
-        $from = $request->get('from', '');
-        $to = $request->get('to', '');
+        $export = $request->get('export', 0);
+        if ($export) {
+            return Excel::download(new Chart2Export($request), str_replace(' ', '', __('Chart 2')).".".date('Ymd_His').'.xlsx');
+        }
+        $from = $request->get("from", date('Y-m-d', time() - 86400*29));
+        $to = $request->get("to", date('Y-m-d'));
 
         $trash_type_list = TrashType::getCacheList();
         $trash_group_list = TrashGroup::getCacheList();
@@ -101,15 +119,19 @@ class StatisticsController extends Controller
 
     public function trashLineWeek(Request $request)
     {
-        $from = $request->get('from', '');
-        $to = $request->get('to', '');
+        $export = $request->get('export', 0);
+        if ($export) {
+            return Excel::download(new Chart3Export($request), str_replace(' ', '', __('Chart 3')).".".date('Ymd_His').'.xlsx');
+        }
+        $from = $request->get("from", date('Y-m-d', time() - 86400*29));
+        $to = $request->get("to", date('Y-m-d'));
 
         $trash_group_list = TrashGroup::getCacheList();
         $report = TrashInfo::reportByWeek($from, $to);
 
         $labels = array();
         $week_list = array_unique(array_column($report, 'year_week'));
-        $min_week = $max_week = 0;
+        $min_week = $max_week = 1;
         if ($week_list) {
             $min_week = min($week_list);
             $max_week = max($week_list);
@@ -129,12 +151,14 @@ class StatisticsController extends Controller
         foreach ($trash_group_list as $trash_location_id => $trash_group_data) {
             foreach ($trash_group_data as $trash_group_id => $trash_group) {
                 for ($week = 1; $week <= $week_diff; $week++) {
-                    $datasets_builder[$trash_group_id][$week] = $datasets_builder[$trash_group_id][$week] ?? 0;
+                    $week_str = TrashInfo::week_plus($min_week, $week-1);
+                    $datasets_builder[$trash_group_id][$week_str] = $datasets_builder[$trash_group_id][$week_str] ?? 0;
                 }
                 $trash_group_names[$trash_group_id] = $trash_group["trash_group_name"];
                 ksort($datasets_builder[$trash_group_id]);
             }
         }
+        ksort($datasets_builder);
 
         $datasets = array();
         $color_list = $this->dynamicColors(count($datasets_builder));
@@ -177,24 +201,32 @@ class StatisticsController extends Controller
 
     public function dashboard(Request $request)
     {
-        $from = $request->get("from", date('Y-m-01'));
+        $from = $request->get("from", date('Y-m-d', time() - 86400*29));
         $to = $request->get("to", date('Y-m-d'));
+        $page = $request->get("page", 1);
+        $limit = $request->get("limit", 30);
         $trash_type_list = TrashType::getCacheList();
         $trash_location_list = TrashLocation::getCacheList();
         $trash_group_list = TrashGroup::getCacheList();
 
-        $date_totals = TrashInfo::trashDate($from, $to);
-        $date_totals_list = array_keys($date_totals);
-        if ($date_totals_list) {
-            $min_date = min($date_totals_list);
-            $max_date = max($date_totals_list);
-            for ($c_date = $min_date; $c_date <= $max_date; $c_date = date("Y-m-d", strtotime($c_date.' +1 day'))) {
-                $date_totals[$c_date] = $date_totals[$c_date] ?? array();
-            }
-            $date_totals_list = array_keys($date_totals);
-            sort($date_totals_list);
+        $date_diff = date_diff(date_create($from),date_create($to))->days;
+        $date_start = date('Y-m-d', strtotime($from.' +'.( ($page-1)*$limit).' day'));
+        $date_end = min(date('Y-m-d', strtotime($from.' +'.( ($page)*$limit-1).' day')), $to);
+        $max_page = floor($date_diff / $limit + 1);
+
+        $date_totals = TrashInfo::trashDate($date_start, $date_end, $page, 30);
+        $date_totals_list = [];
+        $min_date = $date_start;
+        $max_date = $date_end;
+        for ($c_date = $min_date; $c_date <= $max_date; $c_date = date("Y-m-d", strtotime($c_date.' +1 day'))) {
+            $date_totals[$c_date] = $date_totals[$c_date] ?? array();
+            $date_totals_list[] = $c_date;
         }
+
         $max_trash_type_info = TrashInfo::maxTrashType();
+
+        $request_parameter = $request->toArray();
+        unset($request_parameter['page']);
         return view('admin.statistics.dashboard', array(
             'trash_type_list' => $trash_type_list,
             'trash_location_list' => $trash_location_list,
@@ -207,6 +239,9 @@ class StatisticsController extends Controller
             'date_totals_list' => $date_totals_list,
             'from' => $from,
             'to' => $to,
+            'page' => $page,
+            'max_page' => $max_page,
+            'page_uri' => "/admin/stats/dashboard?".http_build_query($request_parameter),
         ));
     }
 

@@ -108,13 +108,15 @@ class TrashInfo extends Model
                 'trash_type_index',
                 self::raw('sum(trash_info_weight) as total')
             ])
-            ->where('trash_group_index', $group_id)
             ->groupBy('trash_type_index');
         if ($from) {
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
             $query->where('trash_info_created_at','<=', $to);
+        }
+        if ($group_id) {
+            $query->where('trash_group_index', $group_id);
         }
         $data = $query->get()->toArray();
 
@@ -222,10 +224,10 @@ class TrashInfo extends Model
     public static function week_diff($year_week1, $year_week2)
     {
         if ($year_week2 < $year_week1) return self::week_diff($year_week2, $year_week1);
-        $year1 = substr($year_week1, 0, 4);
-        $year2 = substr($year_week2, 0, 4);
-        $week1 = substr($year_week1, 4, 2);
-        $week2 = substr($year_week2, 4, 2);
+        $year1 = (int)substr($year_week1, 0, 4);
+        $year2 = (int)substr($year_week2, 0, 4);
+        $week1 = (int)substr($year_week1, 4, 2);
+        $week2 = (int)substr($year_week2, 4, 2);
         if ($year1 == $year2) {
             return (int)$week2 - (int)$week1 + 1;
         }
@@ -233,6 +235,16 @@ class TrashInfo extends Model
             $diff_year = $year2 - ($year1 + 1);
             return $diff_year * 52 + $week2 + (52 - $week1) + 1;
         }
+    }
+    public static function week_plus($year_week, $plus_num)
+    {
+        $year = (int)substr($year_week, 0, 4);
+        $week = (int)substr($year_week, 4, 2);
+        $cal_year = $year + floor(($week + $plus_num) / 53);
+        $cal_week = ($week + $plus_num) % 53;
+
+        return $s = sprintf('%d%02d', $cal_year, $cal_week);
+
     }
     public static function maxUser($group= null, $type= null, $from = null, $to = null)
     {
@@ -304,7 +316,7 @@ class TrashInfo extends Model
         return $trash_type_info;
     }
 
-    public static function trashDate($from = null, $to = null)
+    public static function trashDate($from = null, $to = null, $page = 1, $limit = 30)
     {
         $query = self::query()
             ->select([

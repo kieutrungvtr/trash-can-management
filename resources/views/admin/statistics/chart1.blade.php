@@ -11,35 +11,45 @@
                 <div class="card-body">
                     <h4 class="card-title">{{__('Chart 1')}}</h4>
                     <div class="dropdown mb-4">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuSizeButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Chọn cụm
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton2" style="">
-                            @foreach($trash_group_list as $trash_location_id => $trash_group_data)
-                                <h6 class="dropdown-header">{{$trash_location_list[$trash_location_id]["trash_location_name"]}}</h6>
-                                @foreach($trash_group_data as $trash_group)
-                                    <a class="dropdown-item"
-                                       href="{{URL::current()."?".http_build_query(array('group' => $trash_group["trash_group_id"], 'from'=>$from, 'to'=>$to))}}">{{$trash_group["trash_group_name"]}}</a>
-                                @endforeach
-                                <div class="dropdown-divider"></div>
-                            @endforeach
-                        </div>
-
 
                         <form action="{{Request::url()}}">
                             <input type="hidden" name="group" value="{{$group_id}}">
                             <div class="form-group row">
                                 <div class="col-md-2">
-                                    <label for="from">Tù ngày</label>
+                                    <br/>
+                                    <button class="w-100 btn btn-primary dropdown-toggle" type="button" id="dropdownMenuSizeButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{$group_id ? $group_name :"Tất cả các cụm"}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton2" style="">
+                                        <a class="dropdown-item"
+                                           href="{{URL::current()."?".http_build_query(array('group' => 0, 'from'=>$from, 'to'=>$to))}}">Tất cả các cụm</a>
+                                        @foreach($trash_group_list as $trash_location_id => $trash_group_data)
+                                            <h6 class="dropdown-header">{{$trash_location_list[$trash_location_id]["trash_location_name"]}}</h6>
+                                            @foreach($trash_group_data as $trash_group)
+                                                <a class="dropdown-item"
+                                                   href="{{URL::current()."?".http_build_query(array('group' => $trash_group["trash_group_id"], 'from'=>$from, 'to'=>$to))}}">{{$trash_group["trash_group_name"]}}</a>
+                                            @endforeach
+                                            <div class="dropdown-divider"></div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="from">Từ ngày</label>
                                     <input type="date" id="from" name="from" value="{{$from}}" class="form-control"/>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="to">Đến ngày</label>
                                     <input type="date" id="to" name="to" value="{{$to}}" class="form-control"/>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <br/>
-                                    <button type="submit" class="btn btn-primary me-2">Tìm kiếm</button>
+                                    <button type="submit" class="btn btn-primary me-2 w-100">Tìm kiếm</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <br/>
+                                    <button type="submit" class="btn btn-primary me-2 w-100" name="export" value="1">
+                                        <i class="icon-download"></i>Xuất dữ liệu
+                                    </button>
                                 </div>
                             </div>
                         </form>

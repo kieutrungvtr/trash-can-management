@@ -9,8 +9,9 @@ use App\Models\Sql\TrashType;
 use App\Models\Sql\User;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class DataExport implements FromCollection
+class DataExport implements FromCollection, WithStrictNullComparison
 {
     private $_from;
     private $_to;
