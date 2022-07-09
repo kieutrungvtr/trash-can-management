@@ -9,6 +9,10 @@
         table td, table th {
             font-size: 1rem !important;
         }
+        td:last-child {
+            white-space: normal !important;
+            word-wrap: break-word;
+        }
     </style>
     <div class="row">
         <div class="col-md-6 grid-margin">
@@ -16,6 +20,9 @@
                 <div class="card-body">
                     <div class="table-responsive">
                     <table class="table">
+                        <tr>
+                            <td style="background-color: {{$trash_type["trash_type_color"]}}; border-radius: 10px" colspan="2"></td>
+                        </tr>
                         <tr>
                             <td style="width: 30%"><strong>Tên thùng rác</strong></td>
                             <td>{{$trash["trash_name"]}}</td>
@@ -33,6 +40,10 @@
                             <td>{{$trash_type["trash_type_name"]}}</td>
                         </tr>
                         <tr>
+                            <td><strong>Ghi chú</strong></td>
+                            <td>{{$trash_type["trash_type_description"]}}</td>
+                        </tr>
+                        <tr>
                             <td><strong>Địa chỉ</strong></td>
                             <td>{{$trash["trash_address"]}}</td>
                         </tr>
@@ -46,7 +57,14 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h4 class="card-title">Tạo QR Code</h4>
-                    <img id="QR" src="https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl={{$qrCode}}" width="50%" height="auto" alt="Q"/>
+                    <div id="print_qr">
+                        <img width="50%" height="auto" id="QR" src="https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl={{$qrCode}}" alt="Q"/>
+                        <div style="width: 50%; margin: auto;">
+                            <strong>{{$trash_type["trash_type_name"]}}</strong>
+                            <br/>
+                            {{$trash_type["trash_type_description"]}}
+                        </div>
+                    </div>
                     <br/>
                     <button type="button" class="btn btn-primary me-2" onclick="printQR()">IN</button>
                 </div>
@@ -61,7 +79,9 @@
                 "setTimeout('step2()', 10);}\n" +
                 "function step2(){window.print();window.close()}\n" +
                 "</scri" + "pt></head><body onload='step1()'>\n" +
-                "<img src='" + source + "' width='100%' /></body></html>";
+                // "<img src='" + source + "' width='100%' />" +
+                $('#print_qr').html().replace('<img width="50%"', '<img width="100%"')+
+                "</body></html>";
         }
         function printQR() {
             var source = $("#QR").attr("src");
