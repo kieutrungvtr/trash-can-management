@@ -16,8 +16,15 @@
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav">
-            <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-                <h1 class="welcome-text"><span class="text-black fw-bold">@yield('page_message')</span></h1>
+            <li class="nav-item font-weight-semibold d-none d-sm-block ms-0">
+                <h1 class="welcome-text">
+                    <span class="text-black fw-bold">
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/lmca.png" alt="Liên minh châu âu"/>
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/eu_jule.png" alt="EU JULE"/>
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/oxfam.png" alt="OXFAM"/>
+                        <img class="d-inline-block" height="50" width="auto" src="/images/logo/ueh_university.png" alt="UEH"/>
+                    </span>
+                </h1>
                 <h3 class="welcome-sub-text"></h3>
             </li>
         </ul>

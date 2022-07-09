@@ -1,15 +1,18 @@
 @extends('layouts.admin')
 
 @section('page_title')
-    {{__('Tổng hợp')}}
-@endsection
-@section('page_message')
-    {{__('Tổng hợp dữ liệu')}}
+    {{__('Tổng quang')}}
 @endsection
 @section('custom-style')
     <style>
         .home-tab .nav-tabs .nav-item .nav-link.active {
             background-color: white;
+        }
+
+        th {
+            white-space: normal !important;
+            word-wrap: break-word;
+            text-align: center;
         }
     </style>
 @endsection
@@ -96,7 +99,7 @@
 
                                         @if($max_page > 1)
                                             <nav aria-label="Page navigation example">
-                                                <ul class="pagination">
+                                                <ul class="pagination justify-content-end">
                                                     <li class="page-item"><a class="page-link" href="{{$page_uri}}&page=1"
                                                                              aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
                                                     </li>
@@ -126,7 +129,7 @@
                                 <h3>Trung bình một ngày</h3>
                                 <div class="statistics-details d-flex align-items-center justify-content-between row row-cols-auto">
                                     @foreach($trash_type_list as $trash_type)
-                                        <div class="col flex-fill m-3 card p-4" style="border: 4px {{App\Http\Controllers\Admin\StatisticsController::ConvertColorName($trash_type['trash_type_color'])}}7d solid">
+                                        <div class="col flex-fill m-3 card p-4" style="max-width: 25rem; border: 4px {{App\Http\Controllers\Admin\StatisticsController::ConvertColorName($trash_type['trash_type_color'])}}7d solid">
                                             <p class="statistics-title">{{$trash_type['trash_type_name']}}</p>
                                             <h3 class="rate-percentage">{{number_format($avg_day_type_report[$trash_type['trash_type_id']] ?? 0, 2)}}kg</h3>
                                         </div>
@@ -140,7 +143,7 @@
                                 <h3>Trung bình một tuần</h3>
                                 <div class="statistics-details d-flex align-items-center justify-content-between row row-cols-auto">
                                     @foreach($trash_type_list as $trash_type)
-                                        <div class="col flex-fill m-3 card p-4" style="border: 4px {{App\Http\Controllers\Admin\StatisticsController::ConvertColorName($trash_type['trash_type_color'])}}7d solid">
+                                        <div class="col flex-fill m-3 card p-4" style="max-width: 25rem; border: 4px {{App\Http\Controllers\Admin\StatisticsController::ConvertColorName($trash_type['trash_type_color'])}}7d solid">
                                             <p class="statistics-title">{{$trash_type['trash_type_name']}}</p>
                                             <h3 class="rate-percentage">{{number_format($avg_week_type_report[$trash_type['trash_type_id']] ?? 0, 2)}}kg</h3>
                                         </div>

@@ -192,6 +192,11 @@
                                         </nav>
                                     </div>
                                     <div class="form-group">
+                                        <p style="font-size: 0.9rem"><strong>Ghi chú:</strong>
+                                            {{$trash_type_list[$trash->trash_type_index]["trash_type_description"]}}
+                                        </p>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="user_name">Tên<span style="color: red">*</span></label>
                                         <input type="text" class="form-control" id="user_name" name="user_name" value="{{$user->user_name ?? ''}}" placeholder="Tên" required @if($user??'') readonly @endif>
                                     </div>

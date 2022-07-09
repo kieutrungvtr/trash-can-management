@@ -1,10 +1,7 @@
 @extends('layouts.admin')
 
 @section('page_title')
-    {{__('Tổng hợp')}}
-@endsection
-@section('page_message')
-    {{__('Tổng hợp dữ liệu')}}
+    {{__('Danh sách dữ liệu')}}
 @endsection
 @section('custom-style')
     <style>
@@ -212,7 +209,7 @@
                                         </table>
                                         @if($max_page > 1)
                                             <nav aria-label="Page navigation example">
-                                                <ul class="pagination">
+                                                <ul class="pagination justify-content-end">
                                                     <li class="page-item"><a class="page-link" href="{{$page_uri}}&page=1"
                                                                              aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
                                                     </li>
