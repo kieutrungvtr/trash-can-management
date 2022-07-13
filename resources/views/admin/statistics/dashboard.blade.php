@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('page_title')
-    {{__('Tổng quang')}}
+    {{__('Tổng quan')}}
 @endsection
 @section('custom-style')
     <style>
