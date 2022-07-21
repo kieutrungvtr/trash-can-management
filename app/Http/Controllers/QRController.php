@@ -55,21 +55,22 @@ class QRController extends Controller
                 'error' => "QRCode không tồn tại"
             ]);
         }
-
-        $user = User::query()->where('user_name', trim($user_name))->first();
+        $user_query = User::query()->where('user_name', trim($user_name));
+        if ($user_phone) {
+            $user_query->where('user_phone', trim($user_phone));
+        } else {
+            $user_query->whereNull('user_phone');
+        }
+        $user = $user_query->first();
         if (!$user) {
             $user = new User();
-            $user->user_name = $user_name;
-            $user->user_phone = $user_phone;
-            $user->user_gender = $user_gender;
-            $user->save();
-        } else {
-            if ($user_phone) {
-                $user->user_phone = $user_phone;
-            }
-            $user->user_gender = $user_gender;
-            $user->save();
         }
+        $user->user_name = $user_name;
+        if ($user_phone) {
+            $user->user_phone = $user_phone;
+        }
+        $user->user_gender = $user_gender;
+        $user->save();
 
         Session::put('user_id', $user->user_id);
 

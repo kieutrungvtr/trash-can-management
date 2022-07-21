@@ -38,6 +38,7 @@
                                                 <tr>
                                                     <th>Loại rác</th>
                                                     <th>Tên người đổi rác</th>
+                                                    <th>SĐT</th>
                                                     <th>Số lượng</th>
                                                 </tr>
                                                 @foreach($trash_type_list as $trash_type)
@@ -47,6 +48,7 @@
                                                             {{$trash_type['trash_type_name']}}
                                                         </td>
                                                         <td>{{$max_type_user[$trash_type['trash_type_id']]["user_name"] ?? 'Chưa có ai'}}</td>
+                                                        <td>{{$max_type_user[$trash_type['trash_type_id']]["user_phone"] ?? '-'}}</td>
                                                         <td>{{number_format($max_type_user[$trash_type['trash_type_id']]["total"] ?? 0, 2)}}
                                                             kg
                                                         </td>
@@ -94,6 +96,7 @@
                                                             <tr>
                                                                 <th>Tên cụm</th>
                                                                 <th>Tên người đổi rác</th>
+                                                                <th>SĐT</th>
                                                                 <th>Số lượng</th>
                                                             </tr>
                                                             @foreach($trash_group_list[$trash_location_id] ?? [] as $trash_group)
@@ -102,6 +105,7 @@
                                                                         {{$trash_group['trash_group_name']}}
                                                                     </td>
                                                                     <td>{{$max_group_user[$trash_group['trash_group_id']]["user_name"] ?? 'Chưa có ai'}}</td>
+                                                                    <td>{{$max_group_user[$trash_group['trash_group_id']]["user_phone"] ?? '-'}}</td>
                                                                     <td>{{number_format($max_group_user[$trash_group['trash_group_id']]["total"] ?? 0, 2)}}
                                                                         kg
                                                                     </td>
