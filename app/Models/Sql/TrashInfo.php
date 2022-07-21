@@ -113,7 +113,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         if ($group_id) {
             $query->where('trash_group_index', $group_id);
@@ -136,7 +136,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $query
             ->groupBy('year_week')
@@ -157,7 +157,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $min_max_data = $query->get()->first();
         $min_date = $min_max_data['min_date'] ?? '';
@@ -176,7 +176,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $query
             ->groupBy('trash_type_index')
@@ -195,7 +195,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $min_max_data = $query->get()->first();
         $min_date = $min_max_data['min_date'] ?? '';
@@ -212,7 +212,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $query
             ->groupBy('trash_type_index')
@@ -257,7 +257,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         if ($group) {
             $query->where('trash_group_index',$group);
@@ -306,7 +306,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $query
             ->groupBy('trash_type_index')
@@ -328,7 +328,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         $query
             ->groupBy('trash_type_index')
@@ -356,7 +356,7 @@ class TrashInfo extends Model
             $query->where('trash_info_created_at','>=', $from);
         }
         if ($to) {
-            $query->where('trash_info_created_at','<=', $to);
+            $query->where('trash_info_created_at','<=', date('Y-m-d 23:59:59', strtotime($to)));
         }
         if ($location_id) {
             $query->where('trash_location_index','=', $location_id);
